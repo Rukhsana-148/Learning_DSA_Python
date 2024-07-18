@@ -37,6 +37,37 @@ class BinarySearchTree:
         else:
             return self._search(root.right, key)
 
+    def delete(self, key):
+        self.root = self._delete(self.root, key)
+
+    def _delete(self, root, key):
+        if root is None:
+            return root
+        
+        if key < root.value:
+            root.left = self._delete(root.left, key)
+        elif key > root.value:
+            root.right = self._delete(root.right, key)
+        else:
+            # Node with only one child or no child
+            if root.left is None:
+                return root.right
+            elif root.right is None:
+                return root.left
+
+            # Node with two children: get the inorder successor
+            temp = self._min_value_node(root.right)
+            root.value = temp.value
+            root.right = self._delete(root.right, temp.value)
+
+        return root
+
+    def _min_value_node(self, node):
+        current = node
+        while current.left is not None:
+            current = current.left
+        return current
+
     def inorder_traversal(self):
         return self._inorder_traversal(self.root, [])
 
@@ -54,34 +85,6 @@ class BinarySearchTree:
             if node.left or node.right:
                 self.print_tree(node.left, level + 1, 'L')
                 self.print_tree(node.right, level + 1, 'R')
-    #Delete
-    def delete(self,key):
-        self.root = self._delete(self.root, key)
-        
-    def _delete(self,root,key):
-        if root is None:
-            return root
-        if key>root.value:
-            root.right = self._delete(root.right, key)
-        elif key<root.value:
-            root.left = self._delete(root.left, key)
-             
-        else:
-            if root.left is None:
-                return root.right
-            elif root.right is None:
-                return root.left
-            
-            temp = self._min_value_node(root.right)
-            root.value = temp.value
-            root.right = self._delete(root.right, temp.value)
-        return root
-    def _min_value_node(self, node):
-        current = node
-        while current.left is not None:
-            current = current.left
-        return current
-        
 
 # Usage
 bst = BinarySearchTree()
@@ -96,10 +99,12 @@ for key in keys:
 print("Inorder traversal of the BST:")
 print(bst.inorder_traversal())
 
-# Search for a value
-key = 90
-result = bst.search(key)
-if result is not None:
-    print(f"Key {key} found in the BST.")
-else:
-    print(f"Key {key} not found in the BST.")
+# Deleting a value
+key_to_delete = 50
+print(f"\nDeleting key {key_to_delete}:")
+bst.delete(key_to_delete)
+bst.print_tree(bst.root)
+
+# Inorder traversal after deletion
+print("\nInorder traversal of the BST after deletion:")
+print(bst.inorder_traversal())
