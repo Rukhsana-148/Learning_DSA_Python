@@ -55,32 +55,7 @@ class BinarySearchTree:
                 self.print_tree(node.left, level + 1, 'L')
                 self.print_tree(node.right, level + 1, 'R')
     #Delete
-    def delete(self,key):
-        self.root = self._delete(self.root, key)
-        
-    def _delete(self,root,key):
-        if root is None:
-            return root
-        if key>root.value:
-            root.right = self._delete(root.right, key)
-        elif key<root.value:
-            root.left = self._delete(root.left, key)
-             
-        else:
-            if root.left is None:
-                return root.right
-            elif root.right is None:
-                return root.left
-            
-            temp = self._min_value_node(root.right)
-            root.value = temp.value
-            root.right = self._delete(root.right, temp.value)
-        return root
-    def _min_value_node(self, node):
-        current = node
-        while current.left is not None:
-            current = current.left
-        return current
+   
         
 
 # Usage
